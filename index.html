@@ -27,7 +27,7 @@ model-viewer{position:absolute;inset:0;width:100%;height:100%;background:transpa
   if (!/^https:\/\/tigjrkyhvckhfkazttnu\.supabase\.co\/storage\/v1\/object\/(sign|public)\//.test(m)) { err(); return; }
   var bg = q.get('bg'); if (bg && /^#?[0-9a-fA-F]{6}$/.test(bg)) { document.body.style.background = bg.charAt(0) === '#' ? bg : '#' + bg; }
   var o = Number(q.get('o') || 0); if (o) mv.setAttribute('orientation', '0deg 0deg ' + o + 'deg');
-  if (q.get('f') === '1') { mv.setAttribute('min-camera-orbit', '-75deg 25deg auto'); mv.setAttribute('max-camera-orbit', '75deg 100deg auto'); }
+  if (q.get('f') === '1') { mv.setAttribute('min-camera-orbit', '-75deg 25deg auto'); mv.setAttribute('max-camera-orbit', '75deg 100deg auto'); mv.removeAttribute('auto-rotate'); var held = 0, t0 = performance.now(); mv.addEventListener('pointerdown', function () { held = Date.now(); }); mv.addEventListener('touchstart', function () { held = Date.now(); }, { passive: true }); setInterval(function () { if (Date.now() - held < 8000) return; var th = 35 * Math.sin((performance.now() - t0) / 2200); mv.cameraOrbit = th.toFixed(1) + 'deg 75deg auto'; }, 60); }
   var t = q.get('t'); if (t) document.getElementById('t').textContent = t.slice(0, 60);
   if (q.get('ar') === '0') mv.removeAttribute('ar');
   mv.addEventListener('error', err);
